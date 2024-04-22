@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:background_location/background_location.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -22,6 +23,8 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   bool? serviceRunning;
   Set<Marker> markers = {}; // Markerları tutacak set
   Set<Polyline> polylines = {}; // Rota çizgileri tutacak set
+  List<Placemark> placemarks = [];
+
   final Completer<GoogleMapController> mapController = Completer<GoogleMapController>();
 
   CameraPosition kGooglePlex = const CameraPosition(
@@ -61,7 +64,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     emit(state.copyWith(mapStateEnum: MapStateEnum.update, markers: markers, polylines: polylines));
   }
 
-  void updateTexts(Location location) {
+  void updateTexts(location) {
     latitude = location.latitude.toString();
     longitude = location.longitude.toString();
     accuracy = location.accuracy.toString();
@@ -87,6 +90,13 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     getLocationUpdates();
   }
 
+  Future<void> getAdress(location) async {
+    var data = await placemarkFromCoordinates(location.latitude, location.longitude);
+
+    placemarks.add(data[0]);
+    emit(state.copyWith(mapStateEnum: MapStateEnum.update, markers: markers, polylines: polylines));
+  }
+
 //marker,route ve koordinatları güncelleyen kodun fonksiyonu
   void getLocationUpdates() {
     BackgroundLocation.getLocationUpdates((location) async {
@@ -109,7 +119,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       // Rota koordinatlarına ekle
       routeCoordinates.add(LatLng(location.latitude!, location.longitude!));
       updateRoute(); // Rota çizgisini güncelle
-
+      getAdress(location);
       // Her 100 metrede bir marker oluştur
       if (markers.isEmpty ||
           distanceBetweenMarkers(
@@ -120,16 +130,35 @@ class MapBloc extends Bloc<MapEvent, MapState> {
               ) >=
               0.1) {
         // 100 metre için 0.1 değeri kullanıldı
-        markers.add(
-          Marker(
-            markerId: MarkerId(location.time.toString()),
-            position: LatLng(
-              location.latitude ?? 0,
-              location.longitude ?? 0,
+
+        for (final place in placemarks) {
+          final marker = Marker(
+            markerId: MarkerId(location.latitude.toString()),
+            position: LatLng(location.latitude!, location.longitude!),
+            infoWindow: InfoWindow(
+              title: place.name,
+              snippet: place.street,
             ),
-            icon: BitmapDescriptor.defaultMarker,
-          ),
-        );
+          );
+          markers.add(marker);
+        }
+        /*  markers.add(
+          Marker(
+                  markerId: MarkerId(location.time.toString()),
+                  position: LatLng(
+                    location.latitude ?? 0,
+                    location.longitude ?? 0,
+                  ),
+                  onTap: () {
+                    getAdress(location);
+                  },
+                  infoWindow: InfoWindow(
+                      title: placemarks[0].street ?? location.latitude.toString(),
+                      snippet: placemarks[0].name ?? location.longitude.toString()),
+                  icon: BitmapDescriptor.defaultMarker,
+                )
+       ); */
+
         lastMarkerPosition = LatLng(
           location.latitude ?? 0,
           location.longitude ?? 0,
@@ -150,6 +179,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     markers.clear();
     routeCoordinates.clear();
     polylines.clear();
+    placemarks.clear();
 
     lastMarkerPosition = LatLng(position.latitude, position.longitude);
 
