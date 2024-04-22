@@ -11,3 +11,7 @@ is displayed.
 <img width="813" alt="Screenshot 2024-04-22 at 20 36 23" src="https://github.com/cagdaspektas/background_map/assets/62350321/cbe17f66-c075-49ea-8cad-99e4976d413c">
 
 I added route with emulators route extension.If the route starts app follows to route's pathway.
+
+Here is the video link of app:
+
+https://drive.google.com/file/d/1MtBx08QWSGRjwr518yQzSbaXIDFnJEaI/view?usp=sharing
