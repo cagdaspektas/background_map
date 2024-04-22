@@ -1,17 +1,13 @@
-# map_detector
-
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
 # background_map
+ The user's location is tracked and a marker is placed on the map for every 100 meter change in location.
+is being added.
+- Location tracking is done in the foreground and in the background for as long as possible.
+- Markers are located on the map, and clicking on the markers brings up the address information for that location.
+is displayed.
+- The user can stop or start tracking their location.
+- The option to reset the route has been put in place, unless the route is reset, the current route will be displayed when the app is reopened.
+is displayed.
+
+<img width="813" alt="Screenshot 2024-04-22 at 20 36 23" src="https://github.com/cagdaspektas/background_map/assets/62350321/cbe17f66-c075-49ea-8cad-99e4976d413c">
+
+I added route with emulators route extension.If the route starts app follows to route's pathway.
