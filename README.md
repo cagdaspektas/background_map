@@ -15,3 +15,7 @@ I added route with emulators route extension.If the route starts app follows to 
 Here is the video link of app:
 
 https://drive.google.com/file/d/1MtBx08QWSGRjwr518yQzSbaXIDFnJEaI/view?usp=sharing
+
+
+for to try it:
+Please use an emuator wtih suppor vulkan.For example pixel 3xl
