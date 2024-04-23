@@ -17,6 +17,9 @@ Here is the video link of app:
 https://drive.google.com/file/d/1MtBx08QWSGRjwr518yQzSbaXIDFnJEaI/view?usp=sharing
 
 
+![Screenshot_1713818935](https://github.com/cagdaspektas/background_map/assets/62350321/53e66c3f-c1ff-430b-baa7-91aa0f467b69)
+
+
 for to try it:
 Please use an emuator wtih suppor vulkan.For example pixel 3xl.
 
