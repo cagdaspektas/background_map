@@ -1,11 +1,17 @@
+import 'package:background_location/background_location.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:map_detector/product/map/viewModel/bloc/map_bloc.dart';
 
-class MapView extends StatelessWidget {
+class MapView extends StatefulWidget {
   const MapView({super.key});
 
+  @override
+  State<MapView> createState() => _MapViewState();
+}
+
+class _MapViewState extends State<MapView> {
   @override
   Widget build(BuildContext context) {
     final MapBloc mapBloc = BlocProvider.of<MapBloc>(context);
@@ -34,6 +40,12 @@ class MapView extends StatelessWidget {
     );
   }
 
+  @override
+  void dispose() {
+    BackgroundLocation.stopLocationService();
+    super.dispose();
+  }
+
   Center _view(MapBloc mapBloc, MapState state) {
     return Center(
       child: Column(
@@ -56,38 +68,45 @@ class MapView extends StatelessWidget {
           Text('Bearing: ${mapBloc.bearing}'),
           Text('Speed: ${mapBloc.speed}'),
           Text('Time: ${mapBloc.time}'),
-          ElevatedButton(
-            onPressed: () async {
-              mapBloc.add(MapUpdate());
-
-              mapBloc.startLocation();
-            },
-            child: const Text('Start Location Service'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              mapBloc.add(MapStop());
-
-              mapBloc.stop();
-            },
-            child: const Text('Stop Location Service'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              mapBloc.add(MapClear());
-
-              // Rota çizgisini temizle
-              mapBloc.clearRoute();
-            },
-            child: const Text('clear'),
-          ),
+          _startButton(mapBloc),
+          _stopButton(mapBloc),
+          _clearButton(mapBloc),
         ],
       ),
     );
   }
+
+  ElevatedButton _clearButton(MapBloc mapBloc) {
+    return ElevatedButton(
+      onPressed: () {
+        mapBloc.add(MapClear());
+
+        // Rota çizgisini temizle
+        mapBloc.clearRoute();
+      },
+      child: const Text('clear'),
+    );
+  }
+
+  ElevatedButton _stopButton(MapBloc mapBloc) {
+    return ElevatedButton(
+      onPressed: () {
+        mapBloc.add(MapStop());
+
+        mapBloc.stop();
+      },
+      child: const Text('Stop Location Service'),
+    );
+  }
+
+  ElevatedButton _startButton(MapBloc mapBloc) {
+    return ElevatedButton(
+      onPressed: () async {
+        mapBloc.add(MapUpdate());
+
+        mapBloc.startLocation();
+      },
+      child: const Text('Start Location Service'),
+    );
+  }
 }
-/* @override
-void dispose() {
-  BackgroundLocation.stopLocationService();
-  super.dispose();
-} */
