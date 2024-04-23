@@ -19,3 +19,12 @@ https://drive.google.com/file/d/1MtBx08QWSGRjwr518yQzSbaXIDFnJEaI/view?usp=shari
 
 for to try it:
 Please use an emuator wtih suppor vulkan.For example pixel 3xl
+
+
+otherwise maybe you will get this error:
+ Android emulator stderr:
+ Please update the emulator to one that supports the feature(s): Vulkan
+ Running multiple emulators with the same AVD 
+ is an experimental feature.
+ Please use -read-only flag to enable this feature.
+ Address these issues and try again.
