@@ -119,6 +119,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       // Rota koordinatlarına ekle
       routeCoordinates.add(LatLng(location.latitude!, location.longitude!));
       updateRoute(); // Rota çizgisini güncelle
+      //markerların adres bilgisini topla
       getAdress(location);
       // Her 100 metrede bir marker oluştur
       if (markers.isEmpty ||
@@ -142,22 +143,6 @@ class MapBloc extends Bloc<MapEvent, MapState> {
           );
           markers.add(marker);
         }
-        /*  markers.add(
-          Marker(
-                  markerId: MarkerId(location.time.toString()),
-                  position: LatLng(
-                    location.latitude ?? 0,
-                    location.longitude ?? 0,
-                  ),
-                  onTap: () {
-                    getAdress(location);
-                  },
-                  infoWindow: InfoWindow(
-                      title: placemarks[0].street ?? location.latitude.toString(),
-                      snippet: placemarks[0].name ?? location.longitude.toString()),
-                  icon: BitmapDescriptor.defaultMarker,
-                )
-       ); */
 
         lastMarkerPosition = LatLng(
           location.latitude ?? 0,
@@ -189,6 +174,10 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueYellow),
     ));
     emit(state.copyWith(mapStateEnum: MapStateEnum.clear, markers: markers, polylines: polylines));
+  }
+
+  void dispose() {
+    BackgroundLocation.stopLocationService();
   }
 
   // İki koordinat arasındaki mesafeyi hesaplar
