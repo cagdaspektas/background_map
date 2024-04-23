@@ -105,15 +105,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       }
       updateTexts(location);
 
-      final GoogleMapController controller = await mapController.future;
-      await controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
-        target: LatLng(
-          location.latitude ?? 0,
-          location.longitude ?? 0,
-        ),
-        bearing: 0,
-        zoom: 15,
-      )));
+      _getCameraPosition(location);
 
       updateMarker(LatLng(location.latitude!, location.longitude!));
       // Rota koordinatlarına ekle
@@ -132,17 +124,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
               0.1) {
         // 100 metre için 0.1 değeri kullanıldı
 
-        for (final place in placemarks) {
-          final marker = Marker(
-            markerId: MarkerId(location.latitude.toString()),
-            position: LatLng(location.latitude!, location.longitude!),
-            infoWindow: InfoWindow(
-              title: place.name,
-              snippet: place.street,
-            ),
-          );
-          markers.add(marker);
-        }
+        _addMarkers(location);
 
         lastMarkerPosition = LatLng(
           location.latitude ?? 0,
@@ -150,6 +132,32 @@ class MapBloc extends Bloc<MapEvent, MapState> {
         );
       }
     });
+  }
+
+  _addMarkers(location) {
+    for (final place in placemarks) {
+      final marker = Marker(
+        markerId: MarkerId(location.latitude.toString()),
+        position: LatLng(location.latitude!, location.longitude!),
+        infoWindow: InfoWindow(
+          title: place.name,
+          snippet: place.street,
+        ),
+      );
+      markers.add(marker);
+    }
+  }
+
+  _getCameraPosition(location) async {
+    final GoogleMapController controller = await mapController.future;
+    await controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+      target: LatLng(
+        location.latitude ?? 0,
+        location.longitude ?? 0,
+      ),
+      bearing: 0,
+      zoom: 15,
+    )));
   }
 
   void stop() {
