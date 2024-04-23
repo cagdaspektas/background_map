@@ -18,7 +18,9 @@ https://drive.google.com/file/d/1MtBx08QWSGRjwr518yQzSbaXIDFnJEaI/view?usp=shari
 
 
 for to try it:
-Please use an emuator wtih suppor vulkan.For example pixel 3xl.Project build for android 
+Please use an emuator wtih suppor vulkan.For example pixel 3xl.
+
+Project build for android 
 
 
 otherwise maybe you will get this error:
